@@ -12,8 +12,8 @@ if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
 #----------------------------------------------------------------------
 include("condb.php");
 if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
-    if ($_POST["book_name"] == null || $_POST["book_price"] == null || $_POST["book_stock"] == null)
-        echo "<script>alert('資料有漏缺，請重新輸入');</script>";
+    if ($_POST["book_name"] == null || $_POST["book_price"] == null || $_POST["book_stock"] == null || $_POST["book_url"] == null)
+        echo "<script>alert('資料有漏缺，請重新輸入');location.href='admin_book_add.php';</script>";
     #尋找id最大值，+1成為新book_id，確認不重複---------------------------#
     else {
         $tb_get_last = "SELECT MAX(book_id) FROM bookstore";
@@ -21,7 +21,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
         $book_id = mysqli_fetch_array($last_row);
         $book_id = $book_id['MAX(book_id)'] + 1;
         #加入新資料------------------5A7G0002(╯‵□′)╯︵┴─┴ ------------------#
-        $tb_add = "INSERT INTO bookstore VALUES (" . $book_id . ",'" . $_POST["book_name"] . "'," . $_POST["book_price"] . "," . $_POST["book_stock"] . ",0)";
+        $tb_add = "INSERT INTO bookstore VALUES (" . $book_id . ",'" . $_POST["book_name"] . "'," . $_POST["book_price"] . "," . $_POST["book_stock"] . ",0,'" . $_POST["book_url"] . "')";
         mysqli_query($db_link, $tb_add);
         #導回bookstore_data
         header("Location: admin_book_data.php");
@@ -76,6 +76,10 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
                     <tr>
                         <td>存貨</td>
                         <td><input type="number" name="book_stock" id="book_stock"></td>
+                    </tr>
+                    <tr>
+                        <td>資訊來源</td>
+                        <td><input type="text" name="book_url"></td>
                     </tr>
                 </table>
                 <input name="action" type="hidden" value="add">
