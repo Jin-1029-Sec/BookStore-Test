@@ -24,7 +24,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "search")) {
     header("Location: book_search.php?txt=" . $_POST["search"]);
 }
 //----------------------------------------------------------------------
-//爬蟲，讀取網頁源始碼(以博客來為例)
+//爬蟲，讀取網頁源始碼(以金石堂為例)
 $getFile = file_get_contents($sel_book["book_txt"]);
 $dom = new DOMDocument();
 @$dom->loadHTML($getFile);
