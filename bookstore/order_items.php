@@ -9,14 +9,8 @@ if(isset($_GET["logout"])&&($_GET["logout"]=="true")){
 	unset($_SESSION["user_rank"]);
 	header("Location:index.php");
 }
-#----------------------------------------------------------------------
+
 include("condb.php");
-if (isset($_POST["action"]) && ($_POST["action"] == "update")) {
-    $update_order = "UPDATE order_list SET member_name='" . $_POST["member_name"]."',member_add='".$_POST["member_add"]."',pay='".$_POST["order_pay"]. "' WHERE order_id=" . $_POST["order_id"];
-    $update_order = mysqli_query($db_link, $update_order);
-    #導回bookstore_data
-    header("Location: order_search.php?id=");
-}
 //----------------------5A7G0002(╯‵□′)╯︵┴─┴ --------------------------//
 $sel_order_list = "SELECT *FROM order_list WHERE order_id = ".$_GET["id"];
 $sel_order_list = mysqli_query($db_link, $sel_order_list);
@@ -24,7 +18,15 @@ $show_orders = mysqli_fetch_array($sel_order_list);
 //---------------------
 $sel_order_items= "SELECT *FROM order_item WHERE order_id = ".$_GET["id"];
 $sel_order_items= mysqli_query($db_link, $sel_order_items);
-
+#----------------------------------------------------------------------
+if (isset($_POST["action"]) && ($_POST["action"] == "update")) {
+    if($_POST['order_pay']=="")
+        $_POST['order_pay']=$show_orders['pay'];
+    $update_order = "UPDATE order_list SET member_name='" . $_POST["member_name"]."',member_add='".$_POST["member_add"]."',pay='".$_POST["order_pay"]. "' WHERE order_id=" . $_POST["order_id"];
+    $update_order = mysqli_query($db_link, $update_order);
+    #導回bookstore_data
+    header("Location: order_search.php?id=");
+}
 ?>
 <!----------------------5A7G0002(╯‵□′)╯︵┴─┴ -------------------------->
 <html>
@@ -50,9 +52,10 @@ $sel_order_items= mysqli_query($db_link, $sel_order_items);
     <div class="admin_a">
         <div class="menu_title">~ 歡 迎 蒞 臨 網 路 書 城 ~</div>
         <nav class="menu">
-			<a href='bookstore.php' class='menu_item'>書籍訂購</a>
+			<a href='bookstore.php?txt=all' class='menu_item'>書籍訂購</a>
+            <a href="book_search.php?txt=all" class='menu_item'>書籍查詢</a>
 			<a href="order_search.php" class="menu_item_in" style="color:#ECF5FF;">📌 訂單查詢</a>
-            <a href="member_page.php" class="menu_item">個人資訊設定</a>
+            <a href="member_page.php" class="menu_item">個資設定</a>
 			<a href='?logout=true' class='menu_item'>登出</a>
 		</nav>
         <div class="admin_b">
@@ -88,7 +91,7 @@ $sel_order_items= mysqli_query($db_link, $sel_order_items);
                         <td><?php 
                         if($show_orders["order_status"]=="備貨中"){
                             echo "<select name='order_pay'>";
-                            echo "<option disabled selected>目前：".$show_orders['pay']."</option>";
+                            echo "<option value='".$show_orders['pay']."' disabled selected>目前：".$show_orders['pay']."</option>";
                             echo "<option value='ATM匯款'>ATM匯款</option>";
                             echo "<option value='線上付款'>線上付款</option>";
                             echo "<option value='貨到付款'>貨到付款</option>";
@@ -112,7 +115,6 @@ $sel_order_items= mysqli_query($db_link, $sel_order_items);
                     <tr>
                         <td colspan="2">訂單總金額：<?php echo $show_orders["order_total"] ?>元</td>
                     </tr>
-                </table>
                 <input name="order_id" type="hidden" value="<?php echo $show_orders["order_id"];; ?>">
                 <input name="action" type="hidden" value="update">
                 <input type="submit" class="btn_WhiteBlue" name="button" value="更新資料/返回">

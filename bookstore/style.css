@@ -6,8 +6,10 @@ body {
   /*遮罩*/
 }
 
-
-h3,.a,.b,.admin_a {
+h3,
+.a,
+.b,
+.admin_a {
   text-align: center;
 }
 
@@ -17,6 +19,7 @@ h1 {
   width: auto;
   color: #fff;
 }
+
 table {
   margin: auto;
   /*table置中*/
@@ -33,14 +36,16 @@ table {
 }
 
 .admin_b {
-  width: 400px;
+  width: 500px;
   margin: 0 auto;
   background-color: rgba(235, 235, 240, 0.8);
   border-radius: 5px;
   padding: 10px 0px 15px;
 }
+
+
 /*---------------------------------------------------------*/
-.menu_title{
+.menu_title {
   font-size: 32px;
   color: #fff;
   text-align: center;
@@ -48,11 +53,12 @@ table {
   padding: 20px;
   font-weight: bold;
 }
+
 .menu {
   display: flex;
   align-items: center;
   background: #000;
-  margin-bottom:15px ;
+  margin-bottom: 15px;
 }
 
 .menu_item {
@@ -66,7 +72,7 @@ table {
 
 .menu_item:hover {
   border-bottom: 5px solid #84C1FF;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .menu a {
@@ -74,10 +80,12 @@ table {
   color: #84C1FF;
   font-weight: bold;
 }
-.welcome{
+
+.welcome {
   color: #14477a;
   font-weight: bold;
 }
+
 /**/
 .menu_item_in {
   flex-grow: 1;
@@ -86,6 +94,18 @@ table {
   border-right: 1px solid #84C1FF;
   border-bottom: 5px solid #ECF5FF;
   transition: 0.3s;
+}
+
+/*---------------------------------------------------------*/
+.book_img {
+  /*3:4*/
+  width: 210px;
+  height: 280px;
+}
+.book_img_s {
+  /*3:4*/
+  width: 60px;
+  height: 80px;
 }
 /*---------------------------------------------------------*/
 .btn_WhiteBlue {
@@ -118,7 +138,8 @@ table {
 }
 
 .btn_BlueWhite {
-  text-decoration:none;/*去底線*/
+  text-decoration: none;
+  /*去底線*/
   padding: 5px;
   color: #fff;
   background: #3b3b5f;
@@ -132,7 +153,7 @@ table {
 }
 
 .btn_2line {
-  text-decoration:none;
+  text-decoration: none;
   padding: 5px;
   color: #000;
 }
@@ -149,34 +170,111 @@ table {
   background: #3b3b5f;
   color: #fff;
 }
+
 .tb_show td {
   border-bottom: 1px solid #000;
   font-size: 16px;
   font-weight: bold;
   padding: 10px;
 }
+
 .tb_show tr:hover {
   background-color: #f5f5f5;
 }
+
 /*-------------------------------------------*/
-select{
-  font-size: 16px;
+.book_summary {
+  width: 700px;
+  margin: 0 auto;
+  background-color: rgba(235, 235, 240, 0.8);
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 15px;
+}
+.book_summary th {
+  padding: 8px;
+  font-size: 17px;
+  letter-spacing : 10px ;
+  background: #3b3b5f;
+  color: #fff;
+}
+.book_summary td {
+  padding: 5px;
+  text-align: left;
+  font-size: 15px;
+}
+.book_summary input[type="text"]{
+  width: 100%;
+}
+
+/*--------------------------------------------*/
+select {
+  font-size: 17px;
   width: auto;
 }
+
 /*--------------------------------------------*/
+.search{
+  margin: 0 auto;
+  width: 500px;
+  padding-bottom: 10px;
+}
+.search table{
+  border: none;
+}
+.search input[type="text"]{
+  width: 300px;
+  font-size: 16px;
+  border-radius:5px;
+  border:3.5px solid #84C1FF;
+  padding: 5px;
+  background-color: rgba(f, f, f, 0.8);
+}
+.search input[type="submit"]{
+  width: 28px;
+  height: 28px;
+  background: url(image/search.png);
+  background-size: 100%;
+  border: none;
+  cursor: pointer;
+}
+/**/
+.search2{
+  margin: 0 auto;
+  width: 500px;
+  padding-bottom: 10px;
+}
+.search2 table{
+  border: none;
+}
+.search2 input[type="text"]{
+  width: 300px;
+  font-size: 16px;
+  border-radius:5px;
+  border:2.5px solid #3b3b5f;
+  padding: 5px;
+  background-color: rgba(f, f, f, 0.8);
+}
+.search2 input[type="submit"]{
+  width: 28px;
+  height: 28px;
+  background: url(image/search2.png);
+  background-size: 100%;
+  border: none;
+  cursor: pointer;
+}
+/*----------------------------------------------------*/
 .sort input[type="submit"] {
   width: 18px;
   height: 18px;
   background: url(image/sort_icon.png);
   background-size: 100%;
   background-position: center;
-  background-repeat: no-repeat ;
+  background-repeat: no-repeat;
   border: none;
-}
-.sort input:hover{
   cursor: pointer;
 }
-.sort:hover{
+.sort:hover {
   background: rgba(0, 0, 0, 0.5);
 }
 /**/
@@ -186,24 +284,28 @@ select{
   background: url(image/sort_icon.png);
   background-size: 40%;
   background-position: center;
-  background-repeat: no-repeat ;
+  background-repeat: no-repeat;
   border: none;
 }
-.sort2 input:hover{
+
+.sort2 input:hover {
   cursor: pointer;
 }
-.sort2:hover{
+
+.sort2:hover {
   background: rgba(0, 0, 0, 0.5);
 }
+
 /**/
-.btn_go_back{
+.btn_go_back {
   width: 23px;
   height: 23px;
   background: url(image/before_page2.png);
   background-size: 100%;
   border: none;
 }
-.btn_go_back:hover{
+
+.btn_go_back:hover {
   background: url(image/before_page1.png);
   background-size: 100%;
   cursor: pointer;

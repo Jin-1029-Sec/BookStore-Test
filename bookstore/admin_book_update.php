@@ -12,10 +12,10 @@ if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
 #----------------------------------------------------------------------
 include("condb.php");
 if (isset($_POST["action"]) && ($_POST["action"] == "update")) {
-    if ($_POST["book_name"] == null || $_POST["book_price"] == null || $_POST["book_stock"] == null)
+    if ($_POST["book_name"] == null || $_POST["book_price"] == null || $_POST["book_stock"] == null || $_POST["book_url"] == null)
         echo "<script>alert('資料有漏缺，請重新輸入');</script>";
     else {
-        $update_bookstore = "UPDATE bookstore SET book_name='" . $_POST["book_name"] . "', book_price=" . $_POST["book_price"] . ",book_stock=" . $_POST["book_stock"] . " WHERE book_id=" . $_POST["book_id"];
+        $update_bookstore = "UPDATE bookstore SET book_name='" . $_POST["book_name"] . "', book_price=" . $_POST["book_price"] . ",book_stock=" . $_POST["book_stock"] . ",book_txt='" . $_POST["book_url"] . "' WHERE book_id=" . $_POST["book_id"];
         $update_bookstore = mysqli_query($db_link, $update_bookstore);
         header("Location: admin_book_data.php?id=");
     }
@@ -25,8 +25,26 @@ $sql_select = "SELECT *FROM bookstore WHERE book_id = ?";
 $stmt = $db_link->prepare($sql_select);
 $stmt->bind_param("i", $_GET["id"]);
 $stmt->execute();
-$stmt->bind_result($id, $name, $price, $stock, $sales);
+$stmt->bind_result($id, $name, $price, $stock, $sales, $url);
 $stmt->fetch();
+//-----------------------------------------------------------------------//
+if (file_exists("book_img/" . $_GET["id"] . ".jpg"))
+    $img = "book_img/" . $_GET["id"] . ".jpg";
+else
+    $img = "book_img/error.gif";
+//------------------------------------------------------------------------//
+//爬蟲，讀取網頁源始碼
+$getFile = file_get_contents($url);
+$dom = new DOMDocument();
+@$dom->loadHTML($getFile);
+$xpath = new DOMXPath($dom);
+$txt = '';
+$writer='';
+foreach ($xpath->evaluate('//div[@class ="pdintro_txt1field panelCon"]//span') as $childNode)
+    $txt .= $dom->saveHtml($childNode);
+foreach ($xpath->evaluate('//div[@class ="authorintrofield panelCon"]//span') as $childNode)
+    $writer .= $dom->saveHtml($childNode);
+$writer = explode("<p>", $writer);
 ?>
 <!----------------------5A7G0002(╯‵□′)╯︵┴─┴ -------------------------->
 <html>
@@ -69,8 +87,11 @@ $stmt->fetch();
             <form action="" method="post" name="formu_pdate" id="form_update">
                 <table class="tb_show">
                     <tr>
-                        <th>欄位</th>
-                        <th><?php echo 'ID #' . $id; ?></th>
+                        <th>圖片</th>
+                        <th colspan="2"><?php echo 'ID #' . $id; ?></th>
+                    </tr>
+                    <tr>
+                        <td rowspan="5"><img class="book_img" src="<?php echo $img; ?>"></td>
                     </tr>
                     <tr>
                         <td>書名</td>
@@ -89,13 +110,34 @@ $stmt->fetch();
                         <td><?php echo $sales; ?> 本</td>
                     </tr>
                 </table>
+
+
                 <input name="book_id" type="hidden" value="<?php echo $id; ?>">
                 <input name="action" type="hidden" value="update">
                 <input type="submit" class="btn_WhiteBlue" name="button" value="更新資料">
                 <input type="reset" class="btn_WhiteBlue" name="button2" value="全部清除">
                 <input type="button" class="btn_go_back" onclick="javascript:location.href='admin_book_data.php'">
-            </form>
+
         </div>
+        <table class="book_summary">
+            <tr>
+                <th colspan="2">書 籍 簡 介</th>
+            </tr>
+            <tr>
+                <td style="width: 90%;"><input type="text" name="book_url" value="<?php echo $url; ?>" placeholder="<?php echo $url; ?>"></td>
+                <td><input type="button" class="btn_WhiteBlue" value="前往網頁" onclick="javascript:location.href='<?php echo $url; ?>'"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr>
+                    </hr>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"> <?php echo $txt; ?></td>
+            </tr>
+        </table>
+        </form>
 </body>
 
 </html>

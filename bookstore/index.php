@@ -22,7 +22,7 @@ if(isset($_POST["action"]) && ($_POST["action"] == "login")){
             $_SESSION["user_add"] = $user['member_add']; 
 		    $_SESSION["user_rank"]=$user['member_rank'];
 		    if($_SESSION["user_rank"]!=0)
-			    header("Location: bookstore.php");
+			    header("Location: bookstore.php?txt=all");
             else
 			    header("Location: admin_book_data.php");	
         }

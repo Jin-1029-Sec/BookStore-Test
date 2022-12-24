@@ -28,7 +28,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "update")) {
             $_SESSION["user_add"] = $_POST["member_add"];
             $update_order = mysqli_query($db_link, $update_order);
             #導回bookstore_data
-            header("Location: bookstore.php?");
+            header("Location: bookstore.php?txt=all");
         }else 
             echo "<script>alert('(舊)密碼錯誤，驗證失敗，無法進行更改');</script>";
     }else
@@ -64,9 +64,10 @@ $show_member = mysqli_fetch_array($sel_member_list);
     <div class="admin_a">
         <div class="menu_title">~ 歡 迎 蒞 臨 網 路 書 城 ~</div>
         <nav class="menu">
-            <a href='bookstore.php' class='menu_item'>書籍訂購</a>
+            <a href='bookstore.php?txt=all' class='menu_item'>書籍訂購</a>
+            <a href="book_search.php?txt=all" class='menu_item'>書籍查詢</a>
             <a href="order_search.php" class="menu_item">訂單查詢</a>
-            <a href="member_page.php" class="menu_item_in" style="color:#ECF5FF;">📌 個人資訊設定</a>
+            <a href="member_page.php" class="menu_item_in" style="color:#ECF5FF;">📌 個資設定</a>
             <a href='?logout=true' class='menu_item'>登出</a>
         </nav>
         <div class="admin_b">

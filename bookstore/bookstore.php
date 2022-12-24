@@ -12,6 +12,7 @@ if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
 #-------------------------------------------------------------------------
 $sort = "book_id";
 $sort2 = "asc";
+$txt = "all";
 if (isset($_POST["action"]) && ($_POST["action"] == "go_sort")) {
 	$sort = $_POST["sort"];
 	if ($_POST["sort2"] == 1)
@@ -19,8 +20,14 @@ if (isset($_POST["action"]) && ($_POST["action"] == "go_sort")) {
 	else
 		$sort2 = " desc";
 }
-$tb_sel_book = "SELECT * FROM bookstore ORDER BY " . $sort . " " . $sort2;
-$result = mysqli_query($db_link, $tb_sel_book);
+if ($_GET["txt"] == "all" || isset($_GET["txt"]) == FALSE) {
+	$select_tb = "SELECT * FROM bookstore ORDER BY " . $sort . " " . $sort2;
+} else
+	$select_tb = "SELECT * FROM bookstore WHERE book_name LIKE '%" . $_GET["txt"] . "%' ORDER BY " . $sort . " " . $sort2;
+if (isset($_POST["action"]) && ($_POST["action"] == "search")) {
+	header("Location: bookstore.php?txt=" . $_POST["search"]);
+}
+$result = mysqli_query($db_link, $select_tb);
 #-------------------------------------------------------------------------
 if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 	if ($_POST["member_name"] != null && $_POST["member_add"] != null && $_POST["pay"] != null) {
@@ -31,12 +38,12 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 				if ($_POST[$value] != "" && $_POST[$value] >= 1)
 					$total += $key * $_POST[$value];
 				else
-					echo "<script>alert('數量輸入錯誤(不能為0、空值)，請重新輸入');window.history.back(-1);</script>";
+					echo "<script>alert('數量輸入錯誤(不能為0、空值)，請重新輸入');location.href='bookstore.php';</script>";
 			}
 		} else
-			echo "<script>alert('未勾選任何書籍，請重新選擇');window.history.back(-1);</script>";
+			echo "<script>alert('未勾選任何書籍，請重新選擇');location.href='bookstore.php';</script>";
 	} else
-		echo "<script>alert('訂購人資訊有漏缺，請重新輸入');window.history.back(-1);</script>";
+		echo "<script>alert('訂購人資訊有漏缺，請重新輸入');location.href='bookstore.php';</script>";
 	#尋找id最大值，+1成為新book_id，確認不重複-----------------------------------------------------#
 	$tb_get_last = "SELECT MAX(order_id) FROM order_list";
 	$tb_get_last = mysqli_query($db_link, $tb_get_last);
@@ -44,9 +51,9 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 	$order_id = $order_id['MAX(order_id)'] + 1;
 	#加入新資料------------------5A7G0002(╯‵□′)╯︵┴─┴ --------------------------------------------#
 	if ($total != 0) {
-		date_default_timezone_set('Asia/Taipei');#設定時區
+		date_default_timezone_set('Asia/Taipei'); #設定時區
 		$date_time = date('Y-m-d');
-		$tb_add_order = "INSERT INTO order_list VALUES (" . $order_id . "," . $_SESSION["user_num"] . ",'" . $_POST["member_name"] . "','" . $_POST["member_add"] . "','" . $_POST["pay"] . "'," . $total . ",'備貨中','".$date_time."')";
+		$tb_add_order = "INSERT INTO order_list VALUES (" . $order_id . "," . $_SESSION["user_num"] . ",'" . $_POST["member_name"] . "','" . $_POST["member_add"] . "','" . $_POST["pay"] . "'," . $total . ",'備貨中','" . $date_time . "')";
 		mysqli_query($db_link, $tb_add_order);
 		$book_call = "SELECT * FROM bookstore WHERE book_name='" . $value . "'";
 		$book_call = mysqli_query($db_link, $book_call);
@@ -65,7 +72,10 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 		header("Location: buycar.php?id=" . $order_id);
 	}
 }
-
+//
+$many_book = mysqli_num_rows($result); //查詢結果數量
+if ($many_book == 0)
+	echo "<script>alert('查無結果，請重新查詢');location.href='bookstore.php?txt=all';</script>";
 ?>
 <html>
 
@@ -142,11 +152,13 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 	<div class="a">
 		<div class="menu_title">~ 歡 迎 蒞 臨 網 路 書 城 ~</div>
 		<nav class="menu">
-			<a style="color:#ECF5FF;" href="bookstore.php" class="menu_item_in">📌 書籍訂購</a>
+			<a style="color:#ECF5FF;" href='bookstore.php?txt=all' class="menu_item_in">📌 書籍訂購</a>
+			<a href="book_search.php?txt=all" class='menu_item'>書籍查詢</a>
 			<a href='order_search.php' class='menu_item'>訂單查詢</a>
-			<a href="member_page.php" class="menu_item">個人資訊設定</a>
+			<a href="member_page.php" class="menu_item">個資設定</a>
 			<a href='?logout=true' class='menu_item'>登出</a>
 		</nav>
+
 		<div class="b">
 			<!--<marquee scrollamount="5" behavior="alternate" class="welcome">ﾚ(ﾟ∀ﾟ)ﾍ 歡迎蒞臨本站，購📖享9折優惠 ﾍ( ﾟ∀ﾟ)ﾉ</marquee>-->
 			<h3>訂購人資料</h3>
@@ -177,35 +189,45 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 				</div>
 				<hr style="border:1px dashed #000">
 				<div class="b2">
-					<table>
-						<tr>
-							<input name="action" type="hidden" id="action" value="add">
-							<input type="submit" name="send" id="send" value="確定購買" class="btn">
-							<input type="reset" name="clear" id="clear" value="清除" class="btn">
-						</tr>
+					<tr>
+						<input name="action" type="hidden" id="action" value="add">
+						<input type="submit" name="send" id="send" value="確定購買" class="btn">
+						<input type="reset" name="clear" id="clear" value="清除" class="btn">
+					</tr>
 			</form>
-			<form action="" method="post" name="formsort" id="formsort">
-				<tr>
-					<th >📚</th>
-					<th colspan="5">依據方式：
-						<select name="sort">
-							<option value="book_id" selected>預設編號</option>
-							<option value="book_price">書籍單價</option>
-							<option value="book_stock">目前存貨</option>
-							<option value="book_sales">書籍總銷量</option>
-						</select>
+			<div class="search2">
+				<table>
+					<form action="" method="POST" name="search">
+						<td style="border:none"><input type="text" name="search" placeholder="Search Other Book..." /></td>
+						<td style="border:none"><input type="submit" name="btn_search" value=""></td>
+						<input name="action" type="hidden" value="search">
+					</form>
+				</table>
+			</div>
+			<table>
+				<form action="" method="post" name="formsort" id="formsort">
+					<tr>
+						<th>📚</th>
+						<th colspan="6">依據方式：
+							<select name="sort">
+								<option value="book_id" selected>預設編號</option>
+								<option value="book_price">書籍單價</option>
+								<option value="book_stock">目前存貨</option>
+								<option value="book_sales">書籍總銷量</option>
+							</select>
 
-						<input type="radio" name="sort2" value=1 id="sort1" checked><label for="sort1">正序
-							<input type="radio" name="sort2" value=2 id="sort2"><label for="sort2">倒序
-					</th>
-					<th class="sort">
-						<input name="action" type="hidden" value="go_sort">
-						<input type="submit" name="button" value="">
-					</th>
-				</tr>
-			</form>
+							<input type="radio" name="sort2" value=1 id="sort1" checked><label for="sort1">正序
+								<input type="radio" name="sort2" value=2 id="sort2"><label for="sort2">倒序
+						</th>
+						<th class="sort">
+							<input name="action" type="hidden" value="go_sort">
+							<input type="submit" name="button" value="">
+						</th>
+					</tr>
+				</form>
 				<tr>
 					<th>ID</th>
+					<th>展示</th>
 					<th>書名</th>
 					<th>單價</th>
 					<th>庫存</th>
@@ -219,15 +241,20 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 	<!----------------------5A7G0002(╯‵□′)╯︵┴─┴ -------------------------->
 	<?php
 	while ($order_call = $result->fetch_assoc()) {
+		if (file_exists("book_img/" . $order_call["book_id"] . ".jpg"))
+			$img = "book_img/" . $order_call["book_id"] . ".jpg";
+		else
+			$img = "book_img/error.gif";
 		if ($order_call["book_stock"] > 0) {
 			echo "<tr>";
 			echo "<td>" . $order_call["book_id"] . "</td>";
-			echo "<td>" . $order_call["book_name"] . "</td>";
+			echo "<td><img class='book_img_s' src=" . $img . "></td>";
+			echo "<td><a class='btn_2line'  href='book_show.php?id=" . $order_call["book_id"] . "'>" . $order_call["book_name"] . "🔎</td>";
 			echo "<td>$" . $order_call["book_price"] . "</td>";
 			echo "<td>" . $order_call["book_stock"] . "本</td>";
 			echo "<td>" . $order_call["book_sales"] . "本</td>";
 			echo "<td><input type='number' name='" . $order_call["book_name"] . "'value=0 ";
-			echo "oninput='if(value>" . $order_call["book_stock"] . ")value=" . $order_call["book_stock"] .";if(value<0)value=0' ><span></span</td>";
+			echo "oninput='if(value>" . $order_call["book_stock"] . ")value=" . $order_call["book_stock"] . ";if(value<0)value=0' ><span></span</td>";
 			echo "<td><input type='checkbox' name=book[" . $order_call["book_price"] . "] value='" . $order_call["book_name"] . "'></td>";
 			echo "</tr>";
 		}
@@ -237,4 +264,5 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
 		</table>
 		</div>
 </body>
+
 </html>

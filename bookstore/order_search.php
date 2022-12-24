@@ -40,17 +40,6 @@ $total_pages = ceil($total_row / $page_row_num); #總頁數
 
 <body>
 	<style>
-		.btn3 {
-			padding: 5px;
-			color: #000;
-		}
-
-		.btn3:hover {
-			color: #3b3b5f;
-			border-left: 2px solid #3b3b5f;
-			border-right: 2px solid #3b3b5f;
-		}
-
 		.tb_page {
 			font-size: 16px;
 		}
@@ -64,9 +53,10 @@ $total_pages = ceil($total_row / $page_row_num); #總頁數
 	<div class="admin_a">
 		<div class="menu_title">~ 歡 迎 蒞 臨 網 路 書 城 ~</div>
 		<nav class="menu">
-			<a href='bookstore.php' class='menu_item'>書籍訂購</a>
+			<a href='bookstore.php?txt=all' class='menu_item'>書籍訂購</a>
+			<a href="book_search.php?txt=all" class='menu_item'>書籍查詢</a>
 			<a href="order_search.php" class="menu_item_in" style="color:#ECF5FF;">📌 訂單查詢</a>
-			<a href="member_page.php" class="menu_item">個人資訊設定</a>
+			<a href="member_page.php" class="menu_item">個資設定</a>
 			<a href='?logout=true' class='menu_item'>登出</a>
 		</nav>
 		<div class="b">
@@ -113,7 +103,7 @@ $total_pages = ceil($total_row / $page_row_num); #總頁數
 							echo "#0044BB;'>";
 							echo $show_tb["order_status"] . "</td>";
 						}
-						echo "<td><a class='btn3' href='order_items.php?id=" . $show_tb["order_id"] . "'>🔎查看</a></td>";
+						echo "<td><a class='btn_2line' href='order_items.php?id=" . $show_tb["order_id"] . "'>🔎查看</a></td>";
 						echo "</tr>";
 						$a += 1;
 					}

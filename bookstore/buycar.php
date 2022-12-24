@@ -61,9 +61,10 @@ $sel_items=mysqli_query($db_link, $sel_items);
     <div class="a">
     <div class="menu_title">~ 歡 迎 蒞 臨 網 路 書 城 ~</div>
         <nav class="menu">
-			<a style="color:#ECF5FF;" href="bookstore.php" class="menu_item_in">📌 書籍訂購</a>
+			<a style="color:#ECF5FF;" href='bookstore.php?txt=all' class="menu_item_in">📌 書籍訂購</a>
+            <a href="book_search.php?txt=all" class='menu_item'>書籍查詢</a>
 			<a href='order_search.php' class='menu_item'>訂單查詢</a>
-            <a href="member_page.php" class="menu_item">個人資訊設定</a>
+            <a href="member_page.php" class="menu_item">個資設定</a>
 			<a href='?logout=true' class='menu_item'>登出</a>
 		</nav>
         <div class="admin_b">

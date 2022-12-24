@@ -16,7 +16,7 @@ $date1 = "2022-12-01";
 $date2 = date('Y-m-d');
 $sort = "order_id"; #預設排序方式
 $sort2 = "asc";
-$page_row_num = 5; #每頁筆數
+$page_row_num = 10; #每頁筆數
 $now_page = 1; #目前頁數
 //if翻頁，更新頁數
 if (isset($_GET['page'])) {
@@ -144,7 +144,7 @@ $total_pages = ceil($total_row / $page_row_num); #總頁數
                 <?php if ($now_page > 1) { #不是首頁
                 ?>
                     <td><a class="btn_BlueWhite" href="admin_order_data.php?page=1<?php echo "&sort2=" . $sort2 . "&sort=" . $sort ?>">第一頁</a></td>
-                    <td><a class="btn_BlueWhite" href="aadmin_order_data.php?page=<?php echo ($now_page - 1) . "&sort2=" . $sort2 . "&sort=" . $sort ?>">上一頁</a></td>
+                    <td><a class="btn_BlueWhite" href="admin_order_data.php?page=<?php echo ($now_page - 1) . "&sort2=" . $sort2 . "&sort=" . $sort ?>">上一頁</a></td>
                 <?php } ?>
                 <?php if ($now_page < $total_pages) { #不是末頁 
                 ?>
