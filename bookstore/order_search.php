@@ -1,14 +1,6 @@
 <?php
 session_start();
-#登出
-if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
-	unset($_SESSION["user_num"]);
-	unset($_SESSION["login_user"]);
-	unset($_SESSION["user_id"]);
-	unset($_SESSION["user_add"]);
-	unset($_SESSION["user_rank"]);
-	header("Location:index.php");
-}
+include("logout.php");
 include("condb.php");
 date_default_timezone_set('Asia/Taipei'); #時區設定
 $date1 = "2022-12-01";

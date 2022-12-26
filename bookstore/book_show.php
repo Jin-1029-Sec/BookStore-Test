@@ -1,14 +1,6 @@
 <?php
 session_start();
-#登出
-if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
-    unset($_SESSION["user_num"]);
-    unset($_SESSION["login_user"]);
-    unset($_SESSION["user_id"]);
-    unset($_SESSION["user_add"]);
-    unset($_SESSION["user_rank"]);
-    header("Location:index.php");
-}
+include("logout.php");
 #----------------------------------------------------------------------
 include("condb.php");
 $db_select = "SELECT * FROM bookstore WHERE book_id=" . $_GET["id"]; #get網址傳的id
@@ -24,7 +16,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "search")) {
     header("Location: book_search.php?txt=" . $_POST["search"]);
 }
 //----------------------------------------------------------------------
-//爬蟲，讀取網頁源始碼(以金石堂為例)
+//爬蟲，讀取網頁源始碼
 $getFile = file_get_contents($sel_book["book_txt"]);
 $dom = new DOMDocument();
 @$dom->loadHTML($getFile);

@@ -1,14 +1,7 @@
 <?php
 session_start();
 include("condb.php");
-#登出--------------------------------------------------
-if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
-	unset($_SESSION["user_id"]);
-	unset($_SESSION["login_user"]);
-	unset($_SESSION["user_add"]);
-	unset($_SESSION["user_rank"]);
-	header("Location:index.php");
-}
+include("logout.php");
 #-------------------------------------------------------------------------
 $sort = "book_id";
 $sort2 = "asc";

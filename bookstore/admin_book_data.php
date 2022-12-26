@@ -1,17 +1,7 @@
 <?php
 session_start();
-#登出
-if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
-	unset($_SESSION["user_num"]);
-	unset($_SESSION["login_user"]);
-	unset($_SESSION["user_id"]);
-	unset($_SESSION["user_add"]);
-	unset($_SESSION["user_rank"]);
-	header("Location:index.php");
-}
-#------------------------------------------------------------
+include("logout.php");
 include("condb.php");
-
 #------------------------------------------------------------
 $page_row_num = 10; #每頁筆數
 $now_page = 1; #目前頁數
