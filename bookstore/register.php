@@ -19,7 +19,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
     if ($repeat == false) {
         if ($_POST != null && $_POST["member_id"] != null && $_POST["member_pwd"] != null) {
             if ($_POST != null && $_POST["member_add"] != null && $_POST["member_name"] != null) {
-                $tb_add = "INSERT INTO member VALUES(" . $member_num . ",'" . $_POST["member_id"] . "','" . $_POST["member_name"] . "','" . $_POST["member_pwd"] . "','" . $_POST["member_add"] . "',1)";
+                $tb_add = "INSERT INTO member VALUES(" . $member_num . ",'" . $_POST["member_id"] . "','" . $_POST["member_name"] . "','" . $_POST["member_pwd"] . "','".$_POST["sex"]."','" . $_POST["member_add"] . "',1)";
                 echo $tb_add;
                 mysqli_query($db_link, $tb_add);
                 header("Location: index.php");
@@ -48,7 +48,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
     <div class="a">
         <h1>~ 歡 迎 蒞 臨 網 路 書 城 ~</h1>
         <div class="admin_b">
-            <h2>註冊</h2>
+            <h2>註 冊</h2>
             <form id="form1" name="form1" method="post" action="">
                 <div class="tb_show">
                     <table>
@@ -59,6 +59,13 @@ if (isset($_POST["action"]) && ($_POST["action"] == "add")) {
                         <tr>
                             <td> 姓名：</td>
                             <td><input type="text" name="member_name"></td>
+                        </tr>
+                        <tr>
+                            <td>性別：</td>
+                            <td><input type="radio" name="sex" value="男" id="sex1"><label for="sex1">男
+                            <input type="radio" name="sex" value="女" id="sex2"><label for="sex2">女
+                            <input type="radio" name="sex" value="不願告知" id="sex3"><label for="sex3">不願告知
+                            </td>
                         </tr>
                         <tr>
                             <td>密碼：</td>

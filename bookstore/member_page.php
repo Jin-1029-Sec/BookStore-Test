@@ -1,27 +1,19 @@
 <?php
 session_start();
-#登出
-if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
-    unset($_SESSION["user_num"]);
-    unset($_SESSION["login_user"]);
-    unset($_SESSION["user_id"]);
-    unset($_SESSION["user_add"]);
-    unset($_SESSION["user_rank"]);
-    header("Location:index.php");
-}
+include("logout.php");
 #----------------------------------------------------------------------
 include("condb.php");
 $get_pwd = "SELECT *FROM member WHERE member_num=" . $_SESSION["user_num"];
 $get_pwd = mysqli_query($db_link, $get_pwd);
 $show_pwd = mysqli_fetch_array($get_pwd);
 if (isset($_POST["action"]) && ($_POST["action"] == "update")) {
-    if (($_POST["member_name"] != null) && ($_POST["member_add"] != null)) {
+    if (isset($_POST["member_name"]) != false && isset($_POST["member_add"]) != false && isset($_POST["sex"]) != false) {
         if ($_POST["member_pwd"] == $show_pwd["member_pwd"]) {
             if ($_POST["new_pwd"] == "")
                 $new_pwd = $show_pwd["member_pwd"];
             else
                 $new_pwd = $_POST["new_pwd"];
-            $update_order = "UPDATE member SET member_name='" . $_POST["member_name"] . "',member_add='" . $_POST["member_add"] . "',member_pwd='" . $new_pwd . "' WHERE member_id='" . $_SESSION["user_id"] . "'";
+            $update_order = "UPDATE member SET member_name='" . $_POST["member_name"] ."',member_sex='".$_POST["sex"]. "',member_add='" . $_POST["member_add"] . "',member_pwd='" . $new_pwd . "' WHERE member_id='" . $_SESSION["user_id"] . "'";
             unset($_SESSION["login_user"]);
             unset($_SESSION["user_add"]);
             $_SESSION["login_user"] = $_POST["member_name"];
@@ -85,6 +77,13 @@ $show_member = mysqli_fetch_array($sel_member_list);
                     <tr>
                         <td>*會員姓名</td>
                         <td><?php echo "<input type='text' name='member_name' value='" . $show_member["member_name"] . "'"; ?></td>
+                    </tr>
+                    <tr>
+                        <td>*會員性別</td>
+                        <td><input type="radio" name="sex" value="男" id="sex1"><label for="sex1">男
+                            <input type="radio" name="sex" value="女" id="sex2"><label for="sex2">女
+                            <input type="radio" name="sex" value="不願告知" id="sex3"><label for="sex3">不願告知
+                        </td>
                     </tr>
                     <tr>
                         <td>*地址</td>
